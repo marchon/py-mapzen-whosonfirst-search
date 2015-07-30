@@ -33,6 +33,28 @@ if __name__ == '__main__':
     source = os.path.abspath(options.source)
     crawl = mapzen.whosonfirst.utils.crawl(source)
 
+    # something something something multiprocessing
+    # something something something I bet ES freaks out and cries
+    # (2015730/thisisaaronland)
+
+    for path in crawl:
+        try:
+            idx.index_file(path)
+        except Exception, e:
+            logging.error("failed to index %s, because %s" % (path, e))
+
+    # because this:
+
+    """
+File "./wof-es-index", line 36, in <module>
     rsp = idx.index_files(crawl)
-    print rsp
+  File "/usr/local/mapzen/py-mapzen-whosonfirst-search/scripts/whosonfirst.py", line 114, in index_files
+    return elasticsearch.helpers.bulk(self.es, iter)
+  File "build/bdist.linux-x86_64/egg/elasticsearch/helpers/__init__.py", line 182, in bulk
+  File "build/bdist.linux-x86_64/egg/elasticsearch/helpers/__init__.py", line 155, in streaming_bulk
+elasticsearch.helpers.BulkIndexError: ('4 document(s) failed to index.', [{u'index': {u'status': 400, u'_type': u'country', u'_id': u'85633051', u'error': u'WriteFailureException; nested: MapperParsingException[failed to parse [ne:fips_10_]]; nested: NumberFormatException[For input string: "SZ"]; ', u'_index': u'whosonfirst'}}, {u'index': {u'status': 400, u'_type': u'country', u'_id': u'85633001', u'error': u'MapperParsingException[failed to parse [ne:fips_10_]]; nested: NumberFormatException[For input string: "BU"]; ', u'_index': u'whosonfirst'}}, {u'index': {u'status': 400, u'_type': u'country', u'_id': u'85633057', u'error': u'WriteFailureException; nested: MapperParsingException[failed to parse [ne:fips_10_]]; nested: NumberFormatException[For input string: "CI"]; ', u'_index': u'whosonfirst'}}, {u'index': {u'status': 400, u'_type': u'country', u'_id': u'85633009', u'error': u'WriteFailureException; nested: MapperParsingException[failed to parse [ne:fips_10_]]; nested: NumberFormatException[For input string: "BR"]; ', u'_index': u'whosonfirst'}}])
+    """
+
+    # rsp = idx.index_files(crawl)
+    # print rsp
 
