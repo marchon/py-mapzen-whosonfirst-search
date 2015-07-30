@@ -12,7 +12,7 @@ _Note the bits about namespaces which is discussed below._
 import whosonfirst
 import mapzen.whosonfirst.utils
 
-idx = whosonfirst.search()
+idx = whosonfirst.index()
 
 source = os.path.abspath(options.source)
 crawl = mapzen.whosonfirst.utils.crawl(source)

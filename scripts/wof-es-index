@@ -28,7 +28,7 @@ if __name__ == '__main__':
         logging.basicConfig(level=logging.INFO)
 
     # See above inre namespaces
-    idx = whosonfirst.search()
+    idx = whosonfirst.index()
 
     source = os.path.abspath(options.source)
     crawl = mapzen.whosonfirst.utils.crawl(source)

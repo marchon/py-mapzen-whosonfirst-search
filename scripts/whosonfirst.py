@@ -6,6 +6,8 @@ import csv
 import geojson
 import logging
 
+# https://elasticsearch-py.readthedocs.org/en/master/
+
 import elasticsearch
 import elasticsearch.helpers
 
@@ -19,12 +21,15 @@ class base:
 
     def __init__(self, **kwargs):
 
+        host = kwargs.get('host', 'localhost')
+        port = kwargs.get('port', 9200)
+
         timeout = kwargs.get('timeout', 600)
 
-        es = elasticsearch.Elasticsearch(timeout=timeout)
+        es = elasticsearch.Elasticsearch(host=host, port=port, timeout=timeout)
         self.es = es
 
-class search(base):
+class index(base):
     
     def __init__(self, **kwargs):
         base.__init__(self, **kwargs)
@@ -67,7 +72,18 @@ class search(base):
         }
 
     def prepare_geojson(self, geojson):
+
         props = geojson['properties']
+
+        # Store a stringified bounding box so that tools like
+        # the spelunker can zoom to extent and stuff like that
+        # (20150730/thisisaaronland)
+
+        bbox = geojson.get('bbox', [])
+        bbox = map(str, bbox)	# oh python...
+        bbox = ",".join(bbox)
+        props['geom:bbox'] = bbox
+
         return props
 
     def load_file(self, f):
@@ -113,3 +129,71 @@ class search(base):
 
         iter = self.prepare_files_bulk(files)
         return elasticsearch.helpers.bulk(self.es, iter)
+
+class search(base):
+
+    def __init__(self, **kwargs):
+
+        base.__init__(self, **kwargs)
+
+        self.page = kwargs.get('page', 1)
+        self.per_page = kwargs.get('per_page', 20)
+
+    # https://elasticsearch-py.readthedocs.org/en/master/api.html?highlight=search#elasticsearch.Elasticsearch.search 
+
+    def query(self, body, **kwargs):
+
+        per_page = kwargs.get('per_page', self.per_page)
+        page = kwargs.get('page', self.page)
+        
+        offset = (page - 1) * per_page
+        limit = per_page
+        
+        params = {
+            'index': self.index,
+            'body': body,
+            'from_': offset,
+            'size': limit,
+        }
+        
+        if kwargs.get('doctype', None):
+            params['doc_type'] = kwargs['doctype']
+
+        rsp = es.search(**params)
+        hits = rsp['hits']
+        total = hits['total']
+        
+        docs = []
+        
+        for h in hits['hits']:
+            feature = h['_source']
+            docs.append(feature)
+            
+        pagination = self.paginate(rsp, **kwargs)
+
+        return {'rows': docs, 'pagination': pagination}
+
+    def paginate(self, rsp, **kwargs):
+
+        per_page = kwargs.get('per_page', self.per_page)
+        page = kwargs.get('page', self.page)
+
+        hits = rsp['hits']
+        total = hits['total']
+
+        docs = hits['hits']
+        count = len(docs)
+            
+        pages = float(total) / float(per_page)
+        pages = math.ceil(pages)
+        pages = int(pages)
+            
+        pagination = {
+            'total': total,
+            'count': count,
+            'per_page': per_page,
+            'page': page,
+            'pages': pages
+        }
+
+        return pagination
