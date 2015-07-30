@@ -75,6 +75,11 @@ class index(base):
 
         props = geojson['properties']
 
+        # To do: stringify all the values so that things can
+        # just go in to ES without the automagic schema mapping
+        # thing choosing the wrong field type and then complaining
+        # about it later (20150730/thisisaaronland)
+
         # Store a stringified bounding box so that tools like
         # the spelunker can zoom to extent and stuff like that
         # (20150730/thisisaaronland)
