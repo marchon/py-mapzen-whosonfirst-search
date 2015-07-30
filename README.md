@@ -4,7 +4,9 @@
 
 ### Simple
 
-_Note the bit about namespaces which is discussed below._
+_Note the bits about namespaces which is discussed below._
+
+#### Indexing
 
 ```
 import whosonfirst
@@ -15,7 +17,14 @@ idx = whosonfirst.search()
 source = os.path.abspath(options.source)
 crawl = mapzen.whosonfirst.utils.crawl(source)
 
-rsp = idx.index_files(crawl)
+for path in crawl:
+    try:
+        idx.index_file(path)
+    except Exception, e:
+        logging.error("failed to index %s, because %s" % (path, e))
+
+# Or this:
+# rsp = idx.index_files(crawl)
 ```
 
 ## Caveats
