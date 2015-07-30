@@ -26,7 +26,7 @@ There isn't one yet because Python namespacing hoohah just makes me angry and st
 
 ### Geometries
 
-No GeoJSON `geometry` elements are not included in any responses by default. This is by design for performance reasons. 
+GeoJSON `geometry` elements are not included in any responses by default. This is by design for performance reasons. 
 
 ### Search 
 
