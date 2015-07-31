@@ -5,13 +5,8 @@ import os.path
 import logging
 import geojson
 
+import mapzen.whosonfirst.search
 import mapzen.whosonfirst.utils
-
-# See this - it is poorly namespaced. It needs to be improved but this involves
-# becoming angry because that is what namespaces in Python do. So I am not doing
-# it today... (20150730/thisisaaronland)
-
-import whosonfirst
 
 if __name__ == '__main__':
 
@@ -27,8 +22,7 @@ if __name__ == '__main__':
     else:
         logging.basicConfig(level=logging.INFO)
 
-    # See above inre namespaces
-    idx = whosonfirst.index()
+    idx = mapzen.whosonfirst.search.index()
 
     source = os.path.abspath(options.source)
     crawl = mapzen.whosonfirst.utils.crawl(source)
