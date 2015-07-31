@@ -9,10 +9,10 @@ _Note the bits about namespaces which is discussed below._
 #### Indexing
 
 ```
-import whosonfirst
+import mapzen.whosonfirst.search
 import mapzen.whosonfirst.utils
 
-idx = whosonfirst.index()
+idx = whosonfirst.mapzen.search.index()
 
 source = os.path.abspath(options.source)
 crawl = mapzen.whosonfirst.utils.crawl(source)
@@ -28,10 +28,6 @@ for path in crawl:
 ```
 
 ## Caveats
-
-### Setup.py
-
-There isn't one yet because Python namespacing hoohah just makes me angry and starts to feel like yak-shaving. It will happen but hasn't happened yet.
 
 ### Geometries
 
