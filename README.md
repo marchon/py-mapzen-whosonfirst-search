@@ -35,10 +35,10 @@ GeoJSON `geometry` elements are not included in any responses by default. This i
 
 ### Search 
 
-This is not meant for doing spatial queries. No. There is a separate `py-mapzen-whosonfirst-lookup` package that will makes happy with PostGIS and together they make beautiful spatial lookup. This is not that package.
+This is not meant for doing spatial queries. No. There is a separate `py-mapzen-whosonfirst-spatial` package that will makes happy with PostGIS and together they make beautiful spatial lookup. This is not that package.
 
 ## See also
 
 * https://github.com/mapzen/theory-whosonfirst
 * https://github.com/mapzen/whosonfirst-data
-* https://github.com/mapzen/py-mapzen-whosonfirst-lookup
+* https://github.com/mapzen/py-mapzen-whosonfirst-spatial

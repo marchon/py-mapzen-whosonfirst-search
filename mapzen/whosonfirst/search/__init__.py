@@ -1,6 +1,7 @@
 # https://pythonhosted.org/setuptools/setuptools.html#namespace-packages
 __import__('pkg_resources').declare_namespace(__name__)
 
+import types
 import os.path
 import csv
 import geojson
@@ -75,11 +76,6 @@ class index(base):
 
         props = geojson['properties']
 
-        # To do: stringify all the values so that things can
-        # just go in to ES without the automagic schema mapping
-        # thing choosing the wrong field type and then complaining
-        # about it later (20150730/thisisaaronland)
-
         # Store a stringified bounding box so that tools like
         # the spelunker can zoom to extent and stuff like that
         # (20150730/thisisaaronland)
@@ -89,7 +85,38 @@ class index(base):
         bbox = ",".join(bbox)
         props['geom:bbox'] = bbox
 
+        # To do: stringify all the values so that things can
+        # just go in to ES without the automagic schema mapping
+        # thing choosing the wrong field type and then complaining
+        # about it later (20150730/thisisaaronland)
+
+        props = self.enstringify(props)
+
         return props
+
+    def enstringify(self, data):
+        
+        isa = type(data)
+
+        if isa == types.DictType:
+
+            for k, v in data.items():
+                k = unicode(k)
+                v = self.enstringify(v)
+                data[k] = v
+
+            return data
+
+        elif isa == types.ListType:
+            
+            for thing in data:
+                return self.enstringify(thing)
+
+        elif isa == types.NoneType:
+            return unicode("")
+
+        else:
+            return unicode(data)
 
     def load_file(self, f):
         fh = open(f, 'r')

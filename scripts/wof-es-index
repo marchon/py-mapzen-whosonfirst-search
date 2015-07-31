@@ -32,6 +32,7 @@ if __name__ == '__main__':
     # (2015730/thisisaaronland)
 
     for path in crawl:
+
         try:
             idx.index_file(path)
         except Exception, e:
