@@ -14,6 +14,8 @@ if __name__ == '__main__':
     opt_parser = optparse.OptionParser()
 
     opt_parser.add_option('-s', '--source', dest='source', action='store', default=None, help='Where to read files from')
+
+    opt_parser.add_option('-b', '--bulk', dest='bulk', action='store_true', default=False, help='Index files in bulk mode (default is False)')
     opt_parser.add_option('-v', '--verbose', dest='verbose', action='store_true', default=False, help='Be chatty (default is false)')
     options, args = opt_parser.parse_args()
 
@@ -27,29 +29,12 @@ if __name__ == '__main__':
     source = os.path.abspath(options.source)
     crawl = mapzen.whosonfirst.utils.crawl(source)
 
-    # something something something multiprocessing
-    # something something something I bet ES freaks out and cries
-    # (2015730/thisisaaronland)
+    if options.bulk:
+        idx.index_files(crawl)
 
-    for path in crawl:
-
-        try:
+    else:
+        for path in crawl:
             idx.index_file(path)
-        except Exception, e:
-            logging.error("failed to index %s, because %s" % (path, e))
 
-    # because this:
-
-    """
-File "./wof-es-index", line 36, in <module>
-    rsp = idx.index_files(crawl)
-  File "/usr/local/mapzen/py-mapzen-whosonfirst-search/scripts/whosonfirst.py", line 114, in index_files
-    return elasticsearch.helpers.bulk(self.es, iter)
-  File "build/bdist.linux-x86_64/egg/elasticsearch/helpers/__init__.py", line 182, in bulk
-  File "build/bdist.linux-x86_64/egg/elasticsearch/helpers/__init__.py", line 155, in streaming_bulk
-elasticsearch.helpers.BulkIndexError: ('4 document(s) failed to index.', [{u'index': {u'status': 400, u'_type': u'country', u'_id': u'85633051', u'error': u'WriteFailureException; nested: MapperParsingException[failed to parse [ne:fips_10_]]; nested: NumberFormatException[For input string: "SZ"]; ', u'_index': u'whosonfirst'}}, {u'index': {u'status': 400, u'_type': u'country', u'_id': u'85633001', u'error': u'MapperParsingException[failed to parse [ne:fips_10_]]; nested: NumberFormatException[For input string: "BU"]; ', u'_index': u'whosonfirst'}}, {u'index': {u'status': 400, u'_type': u'country', u'_id': u'85633057', u'error': u'WriteFailureException; nested: MapperParsingException[failed to parse [ne:fips_10_]]; nested: NumberFormatException[For input string: "CI"]; ', u'_index': u'whosonfirst'}}, {u'index': {u'status': 400, u'_type': u'country', u'_id': u'85633009', u'error': u'WriteFailureException; nested: MapperParsingException[failed to parse [ne:fips_10_]]; nested: NumberFormatException[For input string: "BR"]; ', u'_index': u'whosonfirst'}}])
-    """
-
-    # rsp = idx.index_files(crawl)
-    # print rsp
+    sys.exit()
 
