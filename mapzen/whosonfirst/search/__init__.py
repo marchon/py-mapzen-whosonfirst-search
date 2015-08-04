@@ -196,12 +196,28 @@ class query(base):
         docs = []
         
         for h in hits['hits']:
-            feature = h['_source']
+            feature = self.enfeaturify(h)
             docs.append(feature)
             
         pagination = self.paginate(rsp, **kwargs)
 
         return {'rows': docs, 'pagination': pagination}
+
+    def enfeaturify(self, row):
+
+        properties = row['_source']
+        id = properties['wof:id']
+
+        geom = {}
+        bbox = []
+
+        return {
+            'type': 'Feature',
+            'id': id,
+            'bbox': bbox,
+            'geometry': geom,
+            'properties': properties
+        }
 
     def paginate(self, rsp, **kwargs):
 
