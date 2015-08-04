@@ -211,6 +211,26 @@ class query(base):
         geom = {}
         bbox = []
 
+        lat = None
+        lon = None
+
+        if properties.get('geom:bbox', False):
+            bbox = properties['geom:bbox']
+            bbox = bbox.split(",")
+
+        if properties.get('geom:latitude', False) and properties.get('geom:longitude', False):
+            lat = properties['geom:latitude']
+            lat = properties['geom:longitude']
+
+        elif len(bbox) == 4:
+            pass	# derive centroid here...
+
+        else:
+            pass
+
+        if properties.get('wof:placetype', None) == 'venue' and lat and lon:
+                geom = {'type': 'Point', 'coordinates': [ lon, lat ] }
+
         return {
             'type': 'Feature',
             'id': id,
