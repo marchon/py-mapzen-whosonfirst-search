@@ -6,6 +6,7 @@ import os.path
 import csv
 import geojson
 import logging
+import math
 
 # https://elasticsearch-py.readthedocs.org/en/master/
 
@@ -30,14 +31,11 @@ class base:
         es = elasticsearch.Elasticsearch(host=host, port=port, timeout=timeout)
         self.es = es
 
-class index(base):
-    
-    def __init__(self, **kwargs):
-        base.__init__(self, **kwargs)
-
         self.index = 'whosonfirst'
         self.doctype = None
 
+class index(base):
+    
     def prepare_feature(self, feature):
 
         props = feature['properties']
@@ -191,7 +189,7 @@ class query(base):
         if kwargs.get('doctype', None):
             params['doc_type'] = kwargs['doctype']
 
-        rsp = es.search(**params)
+        rsp = self.es.search(**params)
         hits = rsp['hits']
         total = hits['total']
         
