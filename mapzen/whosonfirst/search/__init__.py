@@ -8,6 +8,8 @@ import geojson
 import logging
 import math
 
+import mapzen.whosonfirst.utils
+
 # https://elasticsearch-py.readthedocs.org/en/master/
 
 import elasticsearch
@@ -213,6 +215,11 @@ class query(base):
 
         lat = None
         lon = None
+
+        if not properties.get('wof:path', False):
+
+            path = mapzen.whosonfirst.utils.id2relpath(id)
+            properties['wof:path'] = path
 
         if properties.get('geom:bbox', False):
             bbox = properties['geom:bbox']
