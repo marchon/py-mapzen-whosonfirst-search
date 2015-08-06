@@ -21,6 +21,7 @@ setup(
     packages=packages,
     scripts=[
         'scripts/wof-es-index',
+        'scripts/wof-es-index-files',
         'scripts/wof-es-prepare',
         ],
     download_url='https://github.com/mapzen/py-mapzen-whosonfirst-search/releases/tag/v0.02',

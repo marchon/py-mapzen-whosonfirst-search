@@ -92,6 +92,17 @@ class index(base):
         bbox = ",".join(bbox)
         props['geom:bbox'] = bbox
 
+        # ggggggrgrgrgrgrhhnhnnnhnhnhnhnhhzzzzpphphtttt
+        # (21050806/thisisaaronland)
+
+        omgwtf = (
+            u'ne:fips_10_',
+        )
+
+        for bbq in omgwtf:
+            if props.get(bbq, None):
+                del(props[bbq])
+
         # To do: stringify all the values so that things can
         # just go in to ES without the automagic schema mapping
         # thing choosing the wrong field type and then complaining
@@ -99,6 +110,8 @@ class index(base):
 
         props = self.enstringify(props)
 
+        import pprint
+        # print pprint.pformat(props)
         return props
 
     def enstringify(self, data):
