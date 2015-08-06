@@ -22,7 +22,7 @@ if __name__ == '__main__':
     if options.verbose:	
         logging.basicConfig(level=logging.DEBUG)
     else:
-        logging.basicConfig(level=logging.INFO)
+        logging.basicConfig(level=logging.WARNING)
 
     idx = mapzen.whosonfirst.search.index()
 
@@ -33,8 +33,14 @@ if __name__ == '__main__':
         idx.index_files(crawl)
 
     else:
+
         for path in crawl:
-            idx.index_file(path)
+
+            try:
+                logging.debug("index %s" % path)
+                idx.index_file(path)
+            except Exception, e:
+                logging.error("failed to index %s, because %s" % (path, e))
 
     sys.exit()
 
