@@ -4,9 +4,13 @@ __import__('pkg_resources').declare_namespace(__name__)
 import types
 import os.path
 import csv
+import json
 import geojson
 import logging
 import math
+
+import urllib
+import requests
 
 import mapzen.whosonfirst.utils
 
@@ -32,6 +36,9 @@ class base:
 
         es = elasticsearch.Elasticsearch(host=host, port=port, timeout=timeout)
         self.es = es
+
+        self.host = host
+        self.port = port
 
         self.index = 'whosonfirst'
         self.doctype = None
@@ -170,6 +177,26 @@ class query(base):
 
         self.page = kwargs.get('page', 1)
         self.per_page = kwargs.get('per_page', 20)
+
+    # because who knows what elasticsearch-py is doing half the time...
+    # (20150805/thisisaaronland)
+
+    def search_raw(self, **args):
+
+        path = args.get('path', '_search')
+        body = args.get('body', {})
+        query = args.get('query', {})
+
+        url = "http://%s:%s/%s/%s" % (self.host, self.port, self.index, path)
+
+        if len(query.keys()):
+            q = urllib.urlencode(query)
+            url = url + "?" + q
+
+        body = json.dumps(body)
+
+        rsp = requests.post(url, data=body)
+        return json.loads(rsp.content)
 
     # https://elasticsearch-py.readthedocs.org/en/master/api.html?highlight=search#elasticsearch.Elasticsearch.search 
 
