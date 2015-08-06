@@ -116,8 +116,12 @@ class index(base):
 
         elif isa == types.ListType:
             
+            str_data = []
+
             for thing in data:
-                return self.enstringify(thing)
+                str_data.append(self.enstringify(thing))
+
+            return str_data
 
         elif isa == types.NoneType:
             return unicode("")
