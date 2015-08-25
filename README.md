@@ -27,6 +27,16 @@ for path in crawl:
 # rsp = idx.index_files(crawl)
 ```
 
+## Command line tools
+
+### wof-es-index
+
+```
+$> cd /usr/local/mapzen/whosonfirst-venue/
+$> git pull origin master
+$> /usr/local/bin/wof-es-index -s /usr/local/mapzen/whosonfirst-venue/data/ -b
+```
+
 ## Caveats
 
 ### Geometries

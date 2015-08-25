@@ -92,13 +92,33 @@ class index(base):
         bbox = ",".join(bbox)
         props['geom:bbox'] = bbox
 
+        # ggggggrgrgrgrgrhhnhnnnhnhnhnhnhhzzzzpphphtttt - we shouldn't
+        # have to do this but even with the enstringification below
+        # ES tries to be too clever by half so in the interests of just
+        # getting stuff done we're going to be ruthless about things...
+        # (21050806/thisisaaronland)
+
+        omgwtf = (
+            u'ne:fips_10_',
+            u'ne:gdp_md_est',
+            u'ne:geou_dif',
+            u'ne:pop_est',
+            u'ne:su_dif',
+            u'ne:adm0_dif',
+            u'ne:level',
+        )
+
+        for bbq in omgwtf:
+            if props.has_key(bbq):
+                logging.warning("remove tag '%s' because ES suffers from E_EXCESSIVE_CLEVERNESS" % bbq)
+                del(props[bbq])
+
         # To do: stringify all the values so that things can
         # just go in to ES without the automagic schema mapping
         # thing choosing the wrong field type and then complaining
         # about it later (20150730/thisisaaronland)
 
         props = self.enstringify(props)
-
         return props
 
     def enstringify(self, data):
