@@ -13,6 +13,7 @@ import urllib
 import requests
 
 import mapzen.whosonfirst.utils
+import mapzen.whosonfirst.placetypes
 
 # https://elasticsearch-py.readthedocs.org/en/master/
 
@@ -116,13 +117,13 @@ class index(base):
         # alt placetype names/ID
 
         placetype = props['wof:placetype']
-        placetype = mapzen.whoonfirst.placetypes.placetype(placetype)
+        placetype = mapzen.whosonfirst.placetypes.placetype(placetype)
 
         placetype_id = placetype.id()
         placetype_names = []
 
         for n in placetype.names():
-            placetype_name.append(unicode(n))
+            placetype_names.append(unicode(n))
 
         props['wof:placetype_id'] = placetype_id
         props['wof:placetype_names'] = placetype_names
