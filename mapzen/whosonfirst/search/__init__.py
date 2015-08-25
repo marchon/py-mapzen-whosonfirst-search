@@ -182,6 +182,22 @@ class query(base):
         self.page = kwargs.get('page', 1)
         self.per_page = kwargs.get('per_page', 20)
 
+    def escape(self, str):
+
+        # If you need to use any of the characters which function as operators in
+        # your query itself (and not as operators), then you should escape them
+        # with a leading backslash. For instance, to search for (1+1)=2, you would
+        # need to write your query as \(1\+1\)\=2. 
+        # 
+        # The reserved characters are: + - = && || > < ! ( ) { } [ ] ^ " ~ * ? : \ /
+        # 
+        # Failing to escape these special characters correctly could lead to a
+        # syntax error which prevents your query from running.
+        # 
+        # https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html
+
+        return str
+
     # because who knows what elasticsearch-py is doing half the time...
     # (20150805/thisisaaronland)
 
