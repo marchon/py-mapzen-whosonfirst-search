@@ -113,10 +113,21 @@ class index(base):
                 logging.warning("remove tag '%s' because ES suffers from E_EXCESSIVE_CLEVERNESS" % bbq)
                 del(props[bbq])
 
-        # To do: stringify all the values so that things can
-        # just go in to ES without the automagic schema mapping
-        # thing choosing the wrong field type and then complaining
-        # about it later (20150730/thisisaaronland)
+        # alt placetype names/ID
+
+        placetype = props['wof:placetype']
+        placetype = mapzen.whoonfirst.placetypes.placetype(placetype)
+
+        placetype_id = placetype.id()
+        placetype_names = []
+
+        for n in placetype.names():
+            placetype_name.append(unicode(n))
+
+        props['wof:placetype_id'] = placetype_id
+        props['wof:placetype_names'] = placetype_names
+
+        # because ES suffers from E_EXCESSIVE_CLEVERNESS
 
         props = self.enstringify(props)
         return props
