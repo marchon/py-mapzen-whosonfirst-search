@@ -214,6 +214,13 @@ class query(base):
         # Failing to escape these special characters correctly could lead to a
         # syntax error which prevents your query from running.
         # 
+        # A space may also be a reserved character. For instance, if you have a
+        # synonym list which converts "wi fi" to "wifi", a query_string search for
+        # "wi fi" would fail. The query string parser would interpret your query
+        # as a search for "wi OR fi", while the token stored in your index is
+        # actually "wifi". Escaping the space will protect it from being touched
+        # by the query string parser: "wi\ fi"
+        # 
         # https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html
 
         return str
