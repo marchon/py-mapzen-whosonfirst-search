@@ -223,7 +223,37 @@ class query(base):
         # 
         # https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html
 
-        return str
+        # note the absence of "&" and "|" which are handled separately
+
+        to_escape = [
+            "+", "-", "=", ">", "<", "!", "(", ")", "{", "}", "[", "]", "^", '"', "~", "*", "?", ":", "\\", "/"
+        ]
+
+        escaped = []
+
+        unistr = str.decode("utf-8")
+        length = len(unistr)
+
+        i = 0
+
+        while i < length:
+
+            char = unistr[i]
+            
+            if char in to_escape:
+                char = "\%s" % char
+
+            elif char in ("&", "|"):
+
+                if (i + 1) < length and unistr[ i + 1 ] == char:
+                    char = "\%s" % char
+            else:
+                pass
+
+            escaped.append(char)
+            i += 1
+
+        return "".join(escaped)
 
     # because who knows what elasticsearch-py is doing half the time...
     # (20150805/thisisaaronland)
@@ -344,3 +374,8 @@ class query(base):
         }
 
         return pagination
+
+if __name__ == '__main__':
+
+            q = query();
+            print q.escape("aaron+bob\\&&")
