@@ -162,8 +162,13 @@ class index(base):
             return unicode(data)
 
     def load_file(self, f):
-        fh = open(f, 'r')
-        return geojson.load(fh)
+
+        try:
+            fh = open(f, 'r')
+            return geojson.load(fh)
+        except Exception, e:
+            logging.error("failed to open %s, because %s" % (f, e))
+            raise Exception, e
 
     def prepare_file(self, f):
 

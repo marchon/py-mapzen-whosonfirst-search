@@ -17,6 +17,7 @@ if __name__ == '__main__':
 
     opt_parser.add_option('-b', '--bulk', dest='bulk', action='store_true', default=False, help='Index files in bulk mode (default is False)')
     opt_parser.add_option('-v', '--verbose', dest='verbose', action='store_true', default=False, help='Be chatty (default is false)')
+
     options, args = opt_parser.parse_args()
 
     if options.verbose:	
