@@ -133,15 +133,34 @@ class index(base):
         props = self.enstringify(props)
         return props
 
-    def enstringify(self, data):
+    def enstringify(self, data, **kwargs):
         
+        ima_int = (
+            'gn:elevation',
+            'gn:population',
+            'gn:id',
+            'gp:id',
+            'wof:id',
+            'zs:pop10',
+        )
+
+        ima_float = (
+            'geom:area',
+            'geom:latitude',
+            'geom:longitude',
+            'lbl:latitude',
+            'lbl:longitude',
+            'mps:latitude',
+            'mps:longitude',
+        )
+
         isa = type(data)
 
         if isa == types.DictType:
 
             for k, v in data.items():
                 k = unicode(k)
-                v = self.enstringify(v)
+                v = self.enstringify(v, key=k)
                 data[k] = v
 
             return data
@@ -151,7 +170,7 @@ class index(base):
             str_data = []
 
             for thing in data:
-                str_data.append(self.enstringify(thing))
+                str_data.append(self.enstringify(thing, **kwargs))
 
             return str_data
 
@@ -159,7 +178,17 @@ class index(base):
             return unicode("")
 
         else:
-            return unicode(data)
+
+            k = kwargs.get('key', None)
+
+            if k and k in ima_int:
+                logging.debug("%s is an INT" % k)
+                return int(data)
+            elif k and k in ima_float:
+                logging.debug("%s can FLOAT" % k)
+                return float(data)
+            else:
+                return unicode(data)
 
     def load_file(self, f):
 
