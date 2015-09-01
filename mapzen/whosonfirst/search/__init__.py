@@ -141,11 +141,26 @@ class index(base):
     def enstringify(self, data, **kwargs):
         
         ima_int = (
+            'continent_id',
+            'country_id',
+            'county_id',
             'gn:elevation',
             'gn:population',
             'gn:id',
             'gp:id',
+            'locality_id',
+            'neighbourhood_id',
+            'region_id',
             'wof:id',
+            'wof:belongsto',
+            'wof:breaches',
+            'wof:lastmodified',
+            'wof:megacity',
+            'wof:placetype_id',
+            'wof:population',
+            'wof:scale',
+            'wof:superseded_by',
+            'wof:supersedes',
             'zs:pop10',
         )
 
