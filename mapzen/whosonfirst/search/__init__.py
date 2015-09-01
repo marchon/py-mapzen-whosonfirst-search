@@ -43,6 +43,11 @@ class base:
         self.index = 'whosonfirst'
         self.doctype = None
 
+    def refresh(self):
+
+        self.es.indices.delete(index=self.index, ignore=[400, 404])
+        self.es.indices.create(index=self.index)
+        
 class index(base):
     
     def prepare_feature(self, feature):
@@ -303,6 +308,25 @@ class query(base):
             'size': limit,
         }
         
+        # TBD... (20150901/thisisaaronland)
+
+        """
+        if body.get('sort', None):
+
+            sort = body['sort']
+            del(body['sort'])
+
+            s = []
+
+            for f in sort:
+
+                for k, v in f.items():
+                    q = "%s:%s" % (k, v)
+                    s.append(q)
+
+            params['sort'] = ",".join(s)
+        """
+
         if kwargs.get('doctype', None):
             params['doc_type'] = kwargs['doctype']
 
