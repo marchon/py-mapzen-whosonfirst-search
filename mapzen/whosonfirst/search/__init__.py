@@ -180,13 +180,24 @@ class index(base):
         else:
 
             k = kwargs.get('key', None)
+            logging.debug("processing %s: %s" % (k,data))
 
             if k and k in ima_int:
-                logging.debug("%s is an INT" % k)
+                logging.warning("%s is an INT: %s" % (k, data))
+
+                if data == '':
+                    return 0
+
                 return int(data)
+
             elif k and k in ima_float:
-                logging.debug("%s can FLOAT" % k)
+                logging.debug("%s can FLOAT: %s" % (k, data))
+
+                if data == '':
+                    return 0.0
+
                 return float(data)
+
             else:
                 return unicode(data)
 
