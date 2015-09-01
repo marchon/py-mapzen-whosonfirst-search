@@ -367,25 +367,6 @@ class query(base):
             'size': limit,
         }
         
-        # TBD... (20150901/thisisaaronland)
-
-        """
-        if body.get('sort', None):
-
-            sort = body['sort']
-            del(body['sort'])
-
-            s = []
-
-            for f in sort:
-
-                for k, v in f.items():
-                    q = "%s:%s" % (k, v)
-                    s.append(q)
-
-            params['sort'] = ",".join(s)
-        """
-
         if kwargs.get('doctype', None):
             params['doc_type'] = kwargs['doctype']
 
