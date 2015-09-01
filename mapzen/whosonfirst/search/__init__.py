@@ -13,6 +13,7 @@ import urllib
 import requests
 
 import mapzen.whosonfirst.utils
+import mapzen.whosonfirst.placetypes
 
 # https://elasticsearch-py.readthedocs.org/en/master/
 
@@ -121,13 +122,13 @@ class index(base):
         # alt placetype names/ID
 
         placetype = props['wof:placetype']
-        placetype = mapzen.whoonfirst.placetypes.placetype(placetype)
+        placetype = mapzen.whosonfirst.placetypes.placetype(placetype)
 
         placetype_id = placetype.id()
         placetype_names = []
 
         for n in placetype.names():
-            placetype_name.append(unicode(n))
+            placetype_names.append(unicode(n))
 
         props['wof:placetype_id'] = placetype_id
         props['wof:placetype_names'] = placetype_names
@@ -137,15 +138,34 @@ class index(base):
         props = self.enstringify(props)
         return props
 
-    def enstringify(self, data):
+    def enstringify(self, data, **kwargs):
         
+        ima_int = (
+            'gn:elevation',
+            'gn:population',
+            'gn:id',
+            'gp:id',
+            'wof:id',
+            'zs:pop10',
+        )
+
+        ima_float = (
+            'geom:area',
+            'geom:latitude',
+            'geom:longitude',
+            'lbl:latitude',
+            'lbl:longitude',
+            'mps:latitude',
+            'mps:longitude',
+        )
+
         isa = type(data)
 
         if isa == types.DictType:
 
             for k, v in data.items():
                 k = unicode(k)
-                v = self.enstringify(v)
+                v = self.enstringify(v, key=k)
                 data[k] = v
 
             return data
@@ -155,7 +175,7 @@ class index(base):
             str_data = []
 
             for thing in data:
-                str_data.append(self.enstringify(thing))
+                str_data.append(self.enstringify(thing, **kwargs))
 
             return str_data
 
@@ -163,11 +183,35 @@ class index(base):
             return unicode("")
 
         else:
-            return unicode(data)
+
+            k = kwargs.get('key', None)
+            logging.debug("processing %s: %s" % (k,data))
+
+            if k and k in ima_int:
+
+                if data == '':
+                    return 0
+
+                return int(data)
+
+            elif k and k in ima_float:
+
+                if data == '':
+                    return 0.0
+
+                return float(data)
+
+            else:
+                return unicode(data)
 
     def load_file(self, f):
-        fh = open(f, 'r')
-        return geojson.load(fh)
+
+        try:
+            fh = open(f, 'r')
+            return geojson.load(fh)
+        except Exception, e:
+            logging.error("failed to open %s, because %s" % (f, e))
+            raise Exception, e
 
     def prepare_file(self, f):
 

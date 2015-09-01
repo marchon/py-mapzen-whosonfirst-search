@@ -18,6 +18,7 @@ if __name__ == '__main__':
     opt_parser.add_option('-r', '--refresh', dest='refresh', action='store_true', default=False, help='Create a fresh index, which means trying to delete any existing index (default is False)')
 
     opt_parser.add_option('-v', '--verbose', dest='verbose', action='store_true', default=False, help='Be chatty (default is false)')
+
     options, args = opt_parser.parse_args()
 
     if options.verbose:	
