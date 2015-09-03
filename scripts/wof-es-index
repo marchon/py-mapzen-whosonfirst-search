@@ -17,6 +17,9 @@ if __name__ == '__main__':
     opt_parser.add_option('-b', '--bulk', dest='bulk', action='store_true', default=False, help='Index files in bulk mode (default is False)')
     opt_parser.add_option('-r', '--refresh', dest='refresh', action='store_true', default=False, help='Create a fresh index, which means trying to delete any existing index (default is False)')
 
+    opt_parser.add_option('--host', dest='host', action='store', default='localhost', help='What host your search index lives (default is localhost)')
+    opt_parser.add_option('--port', dest='port', action='store', default=9200, help='What port your search index lives on (default is 9200)')
+
     opt_parser.add_option('-v', '--verbose', dest='verbose', action='store_true', default=False, help='Be chatty (default is false)')
 
     options, args = opt_parser.parse_args()
@@ -26,7 +29,7 @@ if __name__ == '__main__':
     else:
         logging.basicConfig(level=logging.WARNING)
 
-    idx = mapzen.whosonfirst.search.index()
+    idx = mapzen.whosonfirst.search.index(host=options.host, port=options.port)
 
     if options.refresh:
         logging.info("refreshing the ES index")
