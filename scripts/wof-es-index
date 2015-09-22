@@ -19,6 +19,7 @@ if __name__ == '__main__':
 
     opt_parser.add_option('--host', dest='host', action='store', default='localhost', help='What host your search index lives (default is localhost)')
     opt_parser.add_option('--port', dest='port', action='store', default=9200, help='What port your search index lives on (default is 9200)')
+    opt_parser.add_option('--timeout', dest='timeout', action='store', default=600, help='Timeout in seconds for talking to you search index lives on (default is 600)')
 
     opt_parser.add_option('-v', '--verbose', dest='verbose', action='store_true', default=False, help='Be chatty (default is false)')
 
@@ -29,7 +30,7 @@ if __name__ == '__main__':
     else:
         logging.basicConfig(level=logging.WARNING)
 
-    idx = mapzen.whosonfirst.search.index(host=options.host, port=options.port)
+    idx = mapzen.whosonfirst.search.index(host=options.host, port=options.port, timeout=options.timeout)
 
     if options.refresh:
         logging.info("refreshing the ES index")
