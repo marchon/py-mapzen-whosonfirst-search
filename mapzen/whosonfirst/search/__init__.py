@@ -32,8 +32,10 @@ class base:
 
         host = kwargs.get('host', 'localhost')
         port = kwargs.get('port', 9200)
-
         timeout = kwargs.get('timeout', 600)
+
+        port = int(port)
+        timeout = int(timeout)
 
         es = elasticsearch.Elasticsearch(host=host, port=port, timeout=timeout)
         self.es = es
