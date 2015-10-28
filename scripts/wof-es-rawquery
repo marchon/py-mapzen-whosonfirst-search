@@ -1,0 +1,42 @@
+#!/usr/bin/env python
+# -*-python-*-
+
+import sys
+import logging
+import os.path
+import json
+import pprint
+
+import mapzen.whosonfirst.search
+
+if __name__ == '__main__':
+
+    import optparse
+    opt_parser = optparse.OptionParser()
+
+    opt_parser.add_option('--query', dest='query', action='store', default='-', help='')
+
+    opt_parser.add_option('--host', dest='host', action='store', default='localhost', help='What host your search index lives (default is localhost)')
+    opt_parser.add_option('--port', dest='port', action='store', default=9200, help='What port your search index lives on (default is 9200)')
+    opt_parser.add_option('--timeout', dest='timeout', action='store', default=600, help='Timeout in seconds for talking to you search index lives on (default is 600)')
+
+    opt_parser.add_option('-v', '--verbose', dest='verbose', action='store_true', default=False, help='Be chatty (default is false)')
+
+    options, args = opt_parser.parse_args()
+
+    if options.verbose:	
+        logging.basicConfig(level=logging.DEBUG)
+    else:
+        logging.basicConfig(level=logging.WARNING)
+
+    if options.query == "-":
+        body = json.loads(sys.stdin)
+    else:
+
+        fh = open(os.path.abspath(options.query), 'r')
+        body = json.load(fh)
+
+    qry = mapzen.whosonfirst.search.query(host=options.host, port=options.port, timeout=options.timeout)
+
+    rsp = qry.search_raw(body=body)
+    print pprint.pformat(rsp)
