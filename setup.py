@@ -8,7 +8,7 @@ desc = open("README.md").read(),
 setup(
     name='mapzen.whosonfirst.search',
     namespace_packages=['mapzen', 'mapzen.whosonfirst', 'mapzen.whosonfirst.search'],
-    version='0.05',
+    version='0.06',
     description='Simple Python wrapper for Who\'s On First search functionality',
     author='Mapzen',
     url='https://github.com/mapzen/py-mapzen-whosonfirst-search',
@@ -25,5 +25,5 @@ setup(
         'scripts/wof-es-prepare',
         'scripts/wof-es-rawquery',
         ],
-    download_url='https://github.com/mapzen/py-mapzen-whosonfirst-search/releases/tag/v0.05',
+    download_url='https://github.com/mapzen/py-mapzen-whosonfirst-search/releases/tag/v0.06',
     license='BSD')
