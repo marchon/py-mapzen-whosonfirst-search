@@ -30,7 +30,7 @@ if __name__ == '__main__':
         logging.basicConfig(level=logging.WARNING)
 
     if options.query == "-":
-        body = json.loads(sys.stdin)
+        body = json.load(sys.stdin)
     else:
 
         fh = open(os.path.abspath(options.query), 'r')
