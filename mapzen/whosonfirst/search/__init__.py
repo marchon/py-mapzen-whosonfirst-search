@@ -135,6 +135,21 @@ class index(base):
         props['wof:placetype_id'] = placetype_id
         props['wof:placetype_names'] = placetype_names
 
+        for k, v in props.items():
+
+            if not k.startswith("name:", False):
+                continue
+
+            parts = k.split("_x_")
+            label = parts[1]
+
+            n_label = "name_%s" % label
+
+            names = props.get(n_label, [])
+            names.extend(v)
+
+            props[n_label] = names
+
         # because ES suffers from E_EXCESSIVE_CLEVERNESS
 
         props = self.enstringify(props)
