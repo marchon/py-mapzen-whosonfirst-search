@@ -135,6 +135,8 @@ class index(base):
         props['wof:placetype_id'] = placetype_id
         props['wof:placetype_names'] = placetype_names
 
+        # Names
+
         for k, v in props.items():
 
             if not k.startswith("name:", False):
@@ -149,6 +151,13 @@ class index(base):
             names.extend(v)
 
             props[n_label] = names
+
+        # Misc counters
+
+        conc = props.get('wof:concordances', {})
+        props['wof:concordances_count'] = len(conc.items())
+
+        props['geom:type'] = geojson['geometry']['type']
 
         # because ES suffers from E_EXCESSIVE_CLEVERNESS
 
