@@ -142,15 +142,25 @@ class index(base):
             if not k.startswith("name:", False):
                 continue
 
+            # please actually parse me using mz-wof-names
+            # https://github.com/whosonfirst/py-mapzen-whosonfirst-names
+            # (20151030/thisisaaronland)
+
             parts = k.split("_x_")
-            label = parts[1]
 
-            n_label = "name_%s" % label
+            # https://github.com/whosonfirst/py-mapzen-whosonfirst-search/issues/5
+            # see above (20151030/thisisaaronland)
 
-            names = props.get(n_label, [])
-            names.extend(v)
+            if len(parts) == 2:
 
-            props[n_label] = names
+                label = parts[1]
+
+                n_label = "name_%s" % label
+
+                names = props.get(n_label, [])
+                names.extend(v)
+
+                props[n_label] = names
 
         # Misc counters
 
