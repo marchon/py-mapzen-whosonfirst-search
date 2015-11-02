@@ -7,9 +7,35 @@ documentation which will probably make it hard for you to use unless
 you are willing to poke and around and investigate things on your
 own.
 
+
+## Prerequisites
+
+The Shapely 1.5.x requires
+   GEOS >=3.3 (Shapely 1.2.x requires only GEOS 3.1 but YMMV)
+
+Before You Install Shapely ** Make Sure You Have Installed LIBGEOS ** 
+
+### Windows
+   Windows users should download an executable installer from http://www.lfd.uci.edu/~gohlke/pythonlibs/#shapely or PyPI (if available).
+
+### OSX
+   brew install geos  
+
+### UBUNTU / DEBIAN 
+
+   apt-get install libgeos-dev 
+
+make sure that libgeos is on the system library path and then install Shapely from the Python package index.
+$ pip install shapely
+
+
+
 ## Usage
 
 ### Simple
+
+
+
 
 
 #### Indexing
