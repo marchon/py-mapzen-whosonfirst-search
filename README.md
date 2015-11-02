@@ -11,7 +11,6 @@ own.
 
 ### Simple
 
-_Note the bits about namespaces which is discussed below._
 
 #### Indexing
 
