@@ -13,6 +13,8 @@ own.
 The Shapely 1.5.x requires
    GEOS >=3.3 (Shapely 1.2.x requires only GEOS 3.1 but YMMV)
 
+   see https://pypi.python.org/pypi/Shapely
+
 Before You Install Shapely ** Make Sure You Have Installed LIBGEOS ** 
 
 ### Windows
