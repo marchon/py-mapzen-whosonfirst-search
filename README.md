@@ -46,7 +46,7 @@ $ pip install shapely
 import mapzen.whosonfirst.search
 import mapzen.whosonfirst.utils
 
-idx = whosonfirst.mapzen.search.index()
+idx = mapzen.whosonfirst.search.index()
 
 source = os.path.abspath(options.source)
 crawl = mapzen.whosonfirst.utils.crawl(source)
